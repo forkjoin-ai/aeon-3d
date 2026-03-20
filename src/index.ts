@@ -62,7 +62,10 @@ export function normalizeVec3(value: Vec3): Vec3 {
   return scaleVec3(value, 1 / length);
 }
 
-function ventBranches(branches: TopologyBranch[], budgetMs: number): {
+function ventBranches(
+  branches: TopologyBranch[],
+  budgetMs: number
+): {
   active: TopologyBranch[];
   ventedIds: string[];
 } {
@@ -108,11 +111,12 @@ export async function executeTopologyFrame(
     vertices: Math.max(0, Math.round(branch.vertices)),
     drawCalls: Math.max(0, Math.round(branch.drawCalls)),
     estimatedCostMs: Math.max(0, branch.estimatedCostMs),
-    quality: branch.quality ?? 1
+    quality: branch.quality ?? 1,
   }));
 
   const { active, ventedIds } = ventBranches(preparedBranches, budgetMs);
-  const survivingBranches = active.length > 0 ? active : preparedBranches.slice(0, 1);
+  const survivingBranches =
+    active.length > 0 ? active : preparedBranches.slice(0, 1);
 
   let collapsedBy: TopologyCollapseStrategy = strategy;
   let winnerId: string | null = null;
@@ -154,6 +158,6 @@ export async function executeTopologyFrame(
     totalDrawCalls: totals.drawCalls,
     totalCostMs: Number(totals.costMs.toFixed(3)),
     budgetMs,
-    overBudget: totals.costMs > budgetMs
+    overBudget: totals.costMs > budgetMs,
   };
 }
